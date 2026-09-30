@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"forge.pi.home.arpa/govalds/bot/internal/discord/gateway"
+	"forge.pi.home.arpa/govalds/bot/internal/versioninfo"
 	"github.com/disgoorg/disgo/discord"
 	"github.com/disgoorg/disgo/events"
 )
@@ -24,9 +25,15 @@ func ping(h *gateway.CommandHandler, ctx context.Context, event *events.Applicat
 	}
 
 	content := fmt.Sprintf(
-		"## :man_in_manual_wheelchair: Линус GOвальдс работает!\n"+
+		"## :man_in_manual_wheelchair: Я работаю!\n"+
+			"Линус GOвальдс версия %s, коммит `%s`, собран <t:%d:f>\n"+
+			"Репозиторий: `%s`\n\n"+
 			"`Gateway: %d мс.` `REST: %d мс.`\n"+
 			"Защищаю людей от RedHat уже **%s**",
+		versioninfo.BotVersion(),
+		versioninfo.Commit(),
+		versioninfo.BuildTime().Unix(),
+		versioninfo.Repository(),
 		gatewayLatency.Milliseconds(),
 		elapsed.Milliseconds(),
 		time.Since(h.Options().STime).Truncate(time.Second).String(),

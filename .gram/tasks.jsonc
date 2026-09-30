@@ -1,7 +1,7 @@
 [
   {
     "label": "Start",
-    "command": "go run ./cmd start -c config.yaml -e .env -p linusbot.pid",
+    "command": "bash build && ./linus start -c config.yaml -e .env -p linus.pid && rm linus",
     "show_command": false,
     "allow_concurrent_runs": false,
     "reveal": "no_focus",
@@ -12,17 +12,7 @@
     "show_command": false,
   },
   {
-    "label": "Build for current OS",
-    "command": "go build -o linus -v -trimpath -ldflags \"-s -w -buildid=\" ./cmd",
-  },
-  {
-    "label": "Build for ...",
-    "command": "bash .utils/build_for",
-  },
-  {
-    "label": "Lines of code",
-    "command": "python .utils/loc.py cmd internal pkg",
-    "show_command": false,
-    "show_summary": false,
+    "label": "Build",
+    "command": "bash build",
   },
 ]

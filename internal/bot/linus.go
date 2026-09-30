@@ -9,6 +9,7 @@ import (
 
 	idiscord "forge.pi.home.arpa/govalds/bot/internal/discord"
 	igateway "forge.pi.home.arpa/govalds/bot/internal/discord/gateway"
+	"forge.pi.home.arpa/govalds/bot/internal/versioninfo"
 	"forge.pi.home.arpa/govalds/bot/pkg/config"
 	"forge.pi.home.arpa/govalds/bot/pkg/logging"
 	"github.com/disgoorg/disgo"
@@ -27,7 +28,10 @@ type linus struct {
 }
 
 func (l *linus) Start(ctx context.Context) error {
-	l.logger.Info().Msg("Starting Linus bot...")
+	l.logger.Info().
+		Str("version", versioninfo.BotVersion()).
+		Str("commit", versioninfo.Commit()).
+		Msg("Starting Linus bot...")
 
 	handler, err := igateway.NewEventHandler(igateway.EventHandlerOptions{
 		STime:   l.stime,

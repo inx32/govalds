@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+declare -r VERSION="0.1"
+
+function require() {
+    if ! command -v $1 &> /dev/null; then
+        echo "fatal: command '$1' is required but missing"
+        exit 1
+    fi
+}
+
+require go
+require git
+require date
+require uuidgen
+
+declare -r COMMIT=$(git rev-parse --short HEAD)
+declare -r REPO=$(git remote get-url origin)
+declare -r BUILDTIME=$(date +%s)
+declare -r BUILDID=$(uuidgen)
+
+declare -r LDFLAGS="
+    -X 'forge.pi.home.arpa/govalds/bot/internal/versioninfo.botVersion=${VERSION}'
+    -X 'forge.pi.home.arpa/govalds/bot/internal/versioninfo.buildTimestampText=${BUILDTIME}'
+    -X 'forge.pi.home.arpa/govalds/bot/internal/versioninfo.commit=${COMMIT}'
+    -X 'forge.pi.home.arpa/govalds/bot/internal/versioninfo.repository=${REPO}'
+    -s -w -buildid=
+"
+
+echo "Linus GOvalds build ID: ${BUILDID}"
+go build -o linus -v -trimpath -ldflags "$LDFLAGS" ./cmd
