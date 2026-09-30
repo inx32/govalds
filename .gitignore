@@ -1,0 +1,8 @@
+.env
+.build/
+/linus
+/linus-*
+/linus.exe
+/linus-*.exe
+/linus.pid
+config.yaml

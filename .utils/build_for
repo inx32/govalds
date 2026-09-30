@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+
+set -euo pipefail
+
+read -rep "Enter GOOS: " -i "$(go env GOOS)" GOOS
+read -rep "Enter GOARCH: " -i "$(go env GOARCH)" GOARCH
+
+export GOOS GOARCH
+
+exec go build -o linus-${GOOS}-${GOARCH} -v -trimpath -ldflags "-s -w -buildid=" ./cmd

@@ -1,0 +1,28 @@
+[
+  {
+    "label": "Start",
+    "command": "go run ./cmd start -c config.yaml -e .env -p linusbot.pid",
+    "show_command": false,
+    "allow_concurrent_runs": false,
+    "reveal": "no_focus",
+  },
+  {
+    "label": "Check config",
+    "command": "go run ./cmd check -c config.yaml -e .env",
+    "show_command": false,
+  },
+  {
+    "label": "Build for current OS",
+    "command": "go build -o linus -v -trimpath -ldflags \"-s -w -buildid=\" ./cmd",
+  },
+  {
+    "label": "Build for ...",
+    "command": "bash .utils/build_for",
+  },
+  {
+    "label": "Lines of code",
+    "command": "python .utils/loc.py cmd internal pkg",
+    "show_command": false,
+    "show_summary": false,
+  },
+]

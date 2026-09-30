@@ -1,0 +1,11 @@
+[
+  {
+    "adapter": "Delve",
+    "label": "Debug bot",
+    "request": "launch",
+    "mode": "debug",
+    "program": "./cmd",
+    "args": ["start", "-c", "config.yaml", "-e", ".env"],
+    "backend": "default",
+  },
+]
