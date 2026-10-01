@@ -169,6 +169,7 @@ func Speechbubble() gateway.Command {
 			},
 			IntegrationTypes: []discord.ApplicationIntegrationType{
 				discord.ApplicationIntegrationTypeGuildInstall,
+				discord.ApplicationIntegrationTypeUserInstall,
 			},
 		},
 		Func: speechbubble,

@@ -53,6 +53,7 @@ func Ping() gateway.Command {
 			Description: "Send ping",
 			IntegrationTypes: []discord.ApplicationIntegrationType{
 				discord.ApplicationIntegrationTypeGuildInstall,
+				discord.ApplicationIntegrationTypeUserInstall,
 			},
 		},
 		Func: ping,
