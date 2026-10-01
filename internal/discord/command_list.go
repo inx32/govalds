@@ -5,4 +5,4 @@ import (
 	"forge.pi.home.arpa/govalds/bot/internal/discord/gateway"
 )
 
-var CommandList = []gateway.CommandFactory{commands.Ping}
+var CommandList = []gateway.CommandFactory{commands.Ping, commands.Speechbubble}

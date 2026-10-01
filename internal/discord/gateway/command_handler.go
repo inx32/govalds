@@ -100,12 +100,7 @@ func (h *CommandHandler) Process(ctx context.Context, event *events.ApplicationC
 				panic(err2)
 			}
 
-			content := fmt.Sprintf(
-				":warning: __**Something went wrong!**__\n"+
-					"```Application command handler panicked!```\n"+
-					"This incident has been reported. Event ID: `%s`",
-				eventID,
-			)
+			content := fmt.Sprintf("ОшибкаВоВремяВыполненияВстроенногоЯзыка (ID отчёта `%s`)", eventID)
 
 			event.Client().Rest.UpdateFollowupMessage(
 				event.ApplicationID(), event.Token(), response.ID,
