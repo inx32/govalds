@@ -3,12 +3,11 @@ package commands
 import (
 	"bytes"
 	"context"
-	"image"
+	"errors"
 	"image/png"
-	"net/http"
-	"time"
 
 	"forge.pi.home.arpa/govalds/bot/internal/discord/gateway"
+	"forge.pi.home.arpa/govalds/bot/internal/discord/util"
 	"forge.pi.home.arpa/govalds/bot/pkg/imaging"
 	"forge.pi.home.arpa/govalds/bot/pkg/imaging/bubble"
 	"forge.pi.home.arpa/govalds/bot/pkg/imaging/bubbles"
@@ -20,7 +19,6 @@ func speechbubble(_ *gateway.CommandHandler, ctx context.Context, event *events.
 	event.DeferCreateMessage(false)
 	data := event.SlashCommandInteractionData()
 
-	optImage := data.Attachment("image")
 	optCorner := data.String("corner")
 	optBubble := data.String("bubble")
 	optExtend := data.Bool("extend")
@@ -50,27 +48,28 @@ func speechbubble(_ *gateway.CommandHandler, ctx context.Context, event *events.
 		corner = bubble.BottomLeft
 	}
 
-	requestCtx, cancel := context.WithTimeout(ctx, 10*time.Second)
-	defer cancel()
-
-	request, err := http.NewRequestWithContext(requestCtx, "GET", optImage.URL, nil)
+	imageNRGBA, err := util.DecodeImageAttachment(ctx, event, "image")
 	if err != nil {
-		panic(err)
+		var msg string
+
+		switch {
+		case errors.Is(err, imaging.ErrFileTooBig):
+			msg = "Файл слишком большой (но не больше мамы цпловера)"
+
+		case errors.Is(err, imaging.ErrImageTooBig):
+			msg = "Изображение слишком большое (но не больше мамы цпловера)"
+
+		case errors.Is(err, imaging.ErrImageInvalid):
+			msg = "Не могу разобрать это изображение"
+
+		default:
+			panic(err)
+		}
+
+		util.FastError(event, msg)
+		return
 	}
 
-	response, err := http.DefaultClient.Do(request)
-	if err != nil {
-		panic(err)
-	}
-
-	image, _, err := image.Decode(response.Body)
-	if err != nil {
-		response.Body.Close()
-		panic(err)
-	}
-	response.Body.Close()
-
-	imageNRGBA := imaging.ToNRGBA(image)
 	b := bubbles.Bubbles[optBubble]
 
 	imageOutput, err := bubble.Speechbubble(imageNRGBA, b.Mask, corner, optExtend, optHeight)
